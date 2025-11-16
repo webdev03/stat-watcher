@@ -1,0 +1,18 @@
+{
+  "name": "stat-watcher",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "check": "ultracite check",
+    "fix": "ultracite fix"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.3.5",
+    "@types/bun": "latest",
+    "ultracite": "6.3.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
