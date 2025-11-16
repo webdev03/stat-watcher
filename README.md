@@ -1,6 +1,8 @@
 # stat-watcher
 
-A lightweight Bun-powered service that streams live system vitals via Socket.IO and renders them in a polished, configurable dashboard.
+A lightweight [Bun](https://bun.sh)-powered service that streams live system vitals via Socket.IO and renders them in a polished, configurable dashboard.
+
+TODO: this doesn't actually work yet btw!
 
 ## Dashboard usage
 
@@ -10,7 +12,7 @@ A lightweight Bun-powered service that streams live system vitals via Socket.IO 
    bun install
    ```
 
-2. Start the watcher:
+2. Start the server:
 
    ```bash
    bun run start
@@ -20,16 +22,9 @@ A lightweight Bun-powered service that streams live system vitals via Socket.IO 
 
 3. Open the dashboard at [http://localhost:24957/](http://localhost:24957/).
 
-### Features
-
-- **Responsive tiles** – CPU, memory, thermals, storage, and battery stats auto-arrange across mobile and desktop breakpoints.
-- **Live data** – Tiles update in real time over Socket.IO and show connection/last-update indicators.
-- **Customization** – Toggle tiles, adjust density, switch light/dark/system themes, and tweak per-tile options (e.g., memory metric, CPU temp thresholds, storage volume count). Preferences persist in `localStorage` and can be reset from the settings drawer.
-- **Accessibility-friendly** – Supports reduced-motion users, keyboard navigation for the customization drawer, and clearly labeled meters/pills.
-
 ## Development
 
-These steps are for hacking on stat-watcher itself:
+These steps are for developng stat-watcher itself:
 
 ```bash
 bun install
