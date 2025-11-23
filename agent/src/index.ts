@@ -11,7 +11,7 @@ if (!config.has("url")) {
 if (!config.has("token") || config.get("token") === "FILL_HERE") {
   config.set("token", "FILL_HERE");
   console.log(
-    `Please fill out the token and instance URL in \`${config.path}\` - open it in a text editor and follow the instructions from the site`
+    `Please fill out the token and instance URL in \`${config.path}\` - open it in a text editor and follow the instructions from the site`,
   );
   process.exit(1);
 }
@@ -41,7 +41,7 @@ async function sendStats() {
 
   if (!res.ok) {
     throw new Error(
-      `Uploading stats failed with ${res.status} - ${res.statusText}`
+      `Uploading stats failed with ${res.status} - ${res.statusText}`,
     );
   }
 }
@@ -53,7 +53,7 @@ setInterval(
     stats = await getStats();
     await sendStats();
   },
-  Number(config.get("stats_poll_interval")) || 500
+  Number(config.get("stats_poll_interval")) || 500,
 );
 
 console.log("** stat-watcher **");

@@ -9,8 +9,7 @@
       "persistent": true,
       "cache": false
     },
-    "//#check": {},
-    "//#fix": {
+    "//#format": {
       "cache": false
     }
   }
