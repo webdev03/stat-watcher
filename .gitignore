@@ -5,6 +5,16 @@ node_modules
 out
 dist
 *.tgz
+.output
+.vercel
+.netlify
+.wrangler
+.svelte-kit
+build
+
+# vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
 
 # code coverage
 coverage
@@ -32,6 +42,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+Thumbs.db
 
 .turbo
 .cache
