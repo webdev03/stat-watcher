@@ -2,7 +2,12 @@ import { version_with_sha } from "bun";
 import Conf from "conf";
 import { getStats } from "./stats";
 
+console.log("** stat-watcher **");
+console.log(`Running on Bun ${version_with_sha}`);
+
 const config = new Conf({ projectName: "stat-watcher-agent" });
+
+console.log(`Configuration at ${config.path}`);
 
 if (!config.has("url")) {
   config.set("url", "https://stat-watcher.devarsh.me/api/v1");
@@ -55,6 +60,3 @@ setInterval(
   },
   Number(config.get("stats_poll_interval")) || 500,
 );
-
-console.log("** stat-watcher **");
-console.log(`Running on Bun ${version_with_sha}`);
