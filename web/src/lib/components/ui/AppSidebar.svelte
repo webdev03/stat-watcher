@@ -3,6 +3,7 @@
   import HouseIcon from "@lucide/svelte/icons/house";
   import MonitorCogIcon from "@lucide/svelte/icons/monitor-cog";
   import SettingsIcon from "@lucide/svelte/icons/settings";
+  import { goto } from "$app/navigation";
   import { authClient } from "$lib/auth-client";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
@@ -68,8 +69,15 @@
             side="top"
             class="w-(--bits-dropdown-menu-anchor-width)"
           >
-            <DropdownMenu.Item>
-              <span>Sign out</span>
+            <DropdownMenu.Item
+              onclick={() =>
+                authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => goto("/"),
+                  },
+                })}
+            >
+              Sign out
             </DropdownMenu.Item>
           </DropdownMenu.Content>
         </DropdownMenu.Root>
