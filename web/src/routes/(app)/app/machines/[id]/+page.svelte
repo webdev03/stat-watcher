@@ -331,7 +331,7 @@
   {:else}
     <!-- Widget Toggle -->
     <Card.Card>
-      <Card.Header class="pb-2">
+      <Card.Header>
         <Card.Title class="text-sm">Customize Dashboard</Card.Title>
       </Card.Header>
       <Card.Content>
