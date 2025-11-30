@@ -4,6 +4,7 @@
   import Copy from "@lucide/svelte/icons/copy";
   import Loader2 from "@lucide/svelte/icons/loader-2";
   import { goto } from "$app/navigation";
+  import { page } from "$app/state";
   import Button from "$lib/components/ui/button/button.svelte";
   import * as Card from "$lib/components/ui/card";
   import Input from "$lib/components/ui/input/input.svelte";
@@ -135,33 +136,47 @@
               {/if}
             </Button>
           </div>
-          <p class="text-muted-foreground text-xs">
-            ⚠️ Save this token now! You won't be able to see it again.
-          </p>
         </div>
 
         <div class="space-y-3">
           <h4 class="font-medium">Setup Instructions</h4>
           <div class="bg-muted rounded-lg p-4 space-y-3">
             <div>
-              <p class="text-sm font-medium">1. Install the agent</p>
-              <code class="bg-background block rounded px-2 py-1 text-xs mt-1">
-                bun install -g stat-watcher-agent
-              </code>
+              <p class="text-sm font-medium">1. Install the agent on the machine</p>
+              <p class="text-sm">
+                Downloads can be found from our <a
+                  href="https://github.com/webdev03/stat-watcher/releases"
+                  class="underline text-blue-500">GitHub Releases</a
+                > page
+              </p>
             </div>
             <div>
-              <p class="text-sm font-medium">2. Configure with your token</p>
+              <p class="text-sm font-medium">2. Start the agent</p>
+            </div>
+            <div>
+              <p class="text-sm font-medium">
+                3. Replace the configuration file that is given in the logs with
+                the following text:
+              </p>
               <code
                 class="bg-background block rounded px-2 py-1 text-xs mt-1 break-all"
               >
-                stat-watcher-agent configure --token {createdMachine.token}
+                {JSON.stringify(
+                  {
+                    url: `${page.url.origin}/api/v1`,
+                    token: createdMachine.token,
+                  },
+                  null,
+                  2,
+                )}
               </code>
             </div>
             <div>
-              <p class="text-sm font-medium">3. Start the agent</p>
-              <code class="bg-background block rounded px-2 py-1 text-xs mt-1">
-                stat-watcher-agent start
-              </code>
+              <p class="text-sm font-medium">4. Start the agent again</p>
+              <p class="text-sm">
+                You may want to set the agent up to automatically start on
+                login.
+              </p>
             </div>
           </div>
         </div>
