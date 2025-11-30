@@ -29,11 +29,6 @@ export const GET: RequestHandler = async ({ request, params }) => {
 
   // Get latest stats from memory or database
   const stats = latestStats.get(machineId);
-  if (!stats)
-    return json(
-      { error: "No statistics available for this machine" },
-      { status: 404 },
-    );
 
   const now = Date.now();
   const isOnline = machineRecord.lastSeen
@@ -45,8 +40,8 @@ export const GET: RequestHandler = async ({ request, params }) => {
       ...machineRecord,
       isOnline,
     },
-    stats: stats.stats,
-    lastUpdated: stats.timestamp,
+    stats: stats?.stats,
+    lastUpdated: stats?.timestamp ?? new Date(),
   });
 };
 
