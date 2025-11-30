@@ -142,7 +142,9 @@
           <h4 class="font-medium">Setup Instructions</h4>
           <div class="bg-muted rounded-lg p-4 space-y-3">
             <div>
-              <p class="text-sm font-medium">1. Install the agent on the machine</p>
+              <p class="text-sm font-medium">
+                1. Install the agent on the machine
+              </p>
               <p class="text-sm">
                 Downloads can be found from our <a
                   href="https://github.com/webdev03/stat-watcher/releases"
