@@ -1,10 +1,9 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
-import { machine, statsSnapshot } from "$lib/server/db/schema";
+import { machine } from "$lib/server/db/schema";
 import { latestStats } from "$lib/server/stats-store";
 import type { StatsPayload } from "$lib/types/stats";
 import { eq } from "drizzle-orm";
-import { nanoid } from "nanoid";
 
 export const POST: RequestHandler = async ({ request }) => {
   // Get bearer token from Authorization header
@@ -59,23 +58,6 @@ export const POST: RequestHandler = async ({ request }) => {
       stats: payload.data,
       timestamp: now,
       listeners: new Set(),
-    });
-  }
-
-  // Store snapshot in database (throttled - only every 5 seconds to avoid DB bloat)
-  const lastSnapshot = await db.query.statsSnapshot.findFirst({
-    where: eq(statsSnapshot.machineId, machineRecord.id),
-    orderBy: (snapshot, { desc }) => [desc(snapshot.createdAt)],
-  });
-
-  const shouldStoreSnapshot =
-    !lastSnapshot || now.getTime() - lastSnapshot.createdAt.getTime() > 5000;
-
-  if (shouldStoreSnapshot) {
-    await db.insert(statsSnapshot).values({
-      id: nanoid(),
-      machineId: machineRecord.id,
-      data: payload.data,
     });
   }
 

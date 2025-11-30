@@ -123,34 +123,9 @@ export const machine = pgTable(
   ],
 );
 
-// Stats snapshot from a machine
-export const statsSnapshot = pgTable(
-  "stats_snapshot",
-  {
-    id: text("id").primaryKey(),
-    machineId: text("machine_id")
-      .notNull()
-      .references(() => machine.id, { onDelete: "cascade" }),
-    data: jsonb("data").notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-  },
-  (table) => [
-    index("stats_snapshot_machineId_idx").on(table.machineId),
-    index("stats_snapshot_createdAt_idx").on(table.createdAt),
-  ],
-);
-
-export const machineRelations = relations(machine, ({ one, many }) => ({
+export const machineRelations = relations(machine, ({ one }) => ({
   user: one(user, {
     fields: [machine.userId],
     references: [user.id],
-  }),
-  statsSnapshots: many(statsSnapshot),
-}));
-
-export const statsSnapshotRelations = relations(statsSnapshot, ({ one }) => ({
-  machine: one(machine, {
-    fields: [statsSnapshot.machineId],
-    references: [machine.id],
   }),
 }));

@@ -1,7 +1,7 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { auth } from "$lib/auth";
 import { db } from "$lib/server/db";
-import { machine, statsSnapshot } from "$lib/server/db/schema";
+import { machine } from "$lib/server/db/schema";
 import { latestStats } from "$lib/server/stats-store";
 import { and, desc, eq } from "drizzle-orm";
 
@@ -28,21 +28,8 @@ export const GET: RequestHandler = async ({ request, params }) => {
   }
 
   // Get latest stats from memory or database
-  const memoryStats = latestStats.get(machineId);
-  let currentStats = memoryStats?.stats ?? null;
-  let lastUpdated = memoryStats?.timestamp ?? null;
-
-  // If no memory stats, try to get the latest from database
-  if (!currentStats) {
-    const latestSnapshot = await db.query.statsSnapshot.findFirst({
-      where: eq(statsSnapshot.machineId, machineId),
-      orderBy: [desc(statsSnapshot.createdAt)],
-    });
-    if (latestSnapshot) {
-      currentStats = latestSnapshot.data as typeof currentStats;
-      lastUpdated = latestSnapshot.createdAt;
-    }
-  }
+  const stats = latestStats.get(machineId);
+  if (!stats) return json({ error: "No statistics available for this machine" }, { status: 404 });
 
   const now = Date.now();
   const isOnline = machineRecord.lastSeen
@@ -54,8 +41,8 @@ export const GET: RequestHandler = async ({ request, params }) => {
       ...machineRecord,
       isOnline,
     },
-    stats: currentStats,
-    lastUpdated,
+    stats: stats.stats,
+    lastUpdated: stats.timestamp,
   });
 };
 
