@@ -9,7 +9,8 @@
       variant: {
         default: "bg-primary text-primary-foreground border-transparent shadow",
         secondary: "bg-secondary text-secondary-foreground border-transparent",
-        destructive: "bg-destructive text-destructive-foreground border-transparent shadow",
+        destructive:
+          "bg-destructive text-destructive-foreground border-transparent shadow",
         outline: "text-foreground",
         success: "bg-green-500/10 text-green-500 border-green-500/20",
         warning: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",

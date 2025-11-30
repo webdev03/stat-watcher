@@ -43,7 +43,10 @@
 <div
   bind:this={ref}
   data-slot="progress"
-  class={cn("bg-primary/20 relative h-2 w-full overflow-hidden rounded-full", className)}
+  class={cn(
+    "bg-primary/20 relative h-2 w-full overflow-hidden rounded-full",
+    className,
+  )}
   role="progressbar"
   aria-valuenow={value}
   aria-valuemin={0}

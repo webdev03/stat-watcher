@@ -1,27 +1,27 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
-  import { page } from "$app/stores";
-  import { goto } from "$app/navigation";
-  import Button from "$lib/components/ui/button/button.svelte";
-  import * as Card from "$lib/components/ui/card";
-  import { Badge } from "$lib/components/ui/badge";
-  import { Skeleton } from "$lib/components/ui/skeleton";
-  import { Progress } from "$lib/components/ui/progress";
-  import Input from "$lib/components/ui/input/input.svelte";
   import ArrowLeft from "@lucide/svelte/icons/arrow-left";
-  import Monitor from "@lucide/svelte/icons/monitor";
-  import Cpu from "@lucide/svelte/icons/cpu";
-  import MemoryStick from "@lucide/svelte/icons/memory-stick";
-  import HardDrive from "@lucide/svelte/icons/hard-drive";
   import Battery from "@lucide/svelte/icons/battery";
   import BatteryCharging from "@lucide/svelte/icons/battery-charging";
+  import Check from "@lucide/svelte/icons/check";
+  import Cpu from "@lucide/svelte/icons/cpu";
+  import HardDrive from "@lucide/svelte/icons/hard-drive";
+  import MemoryStick from "@lucide/svelte/icons/memory-stick";
+  import Monitor from "@lucide/svelte/icons/monitor";
+  import Pencil from "@lucide/svelte/icons/pencil";
   import Thermometer from "@lucide/svelte/icons/thermometer";
   import Trash2 from "@lucide/svelte/icons/trash-2";
-  import Pencil from "@lucide/svelte/icons/pencil";
-  import Check from "@lucide/svelte/icons/check";
   import X from "@lucide/svelte/icons/x";
   import Zap from "@lucide/svelte/icons/zap";
+  import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
+  import { Badge } from "$lib/components/ui/badge";
+  import Button from "$lib/components/ui/button/button.svelte";
+  import * as Card from "$lib/components/ui/card";
+  import Input from "$lib/components/ui/input/input.svelte";
+  import { Progress } from "$lib/components/ui/progress";
+  import { Skeleton } from "$lib/components/ui/skeleton";
   import type { Stats } from "$lib/types/stats";
+  import { onDestroy, onMount } from "svelte";
 
   interface Machine {
     id: string;
@@ -121,7 +121,7 @@
 
   async function saveName() {
     if (!machine || !editName.trim()) return;
-    
+
     isSaving = true;
     try {
       const response = await fetch(`/api/machines/${machineId}`, {
@@ -203,7 +203,10 @@
   // Save widget preferences
   $effect(() => {
     if (machineId) {
-      localStorage.setItem(`widgets-${machineId}`, JSON.stringify(visibleWidgets));
+      localStorage.setItem(
+        `widgets-${machineId}`,
+        JSON.stringify(visibleWidgets),
+      );
     }
   });
 </script>
@@ -213,7 +216,7 @@
     <Button variant="ghost" size="icon" href="/app/machines">
       <ArrowLeft class="size-4" />
     </Button>
-    
+
     {#if isLoading}
       <Skeleton class="h-8 w-48" />
     {:else if machine}
@@ -224,10 +227,22 @@
             class="max-w-xs"
             onkeydown={(e) => e.key === "Enter" && saveName()}
           />
-          <Button variant="ghost" size="icon" onclick={saveName} disabled={isSaving}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onclick={saveName}
+            disabled={isSaving}
+          >
             <Check class="size-4" />
           </Button>
-          <Button variant="ghost" size="icon" onclick={() => { isEditing = false; editName = machine?.name ?? ""; }}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onclick={() => {
+              isEditing = false;
+              editName = machine?.name ?? "";
+            }}
+          >
             <X class="size-4" />
           </Button>
         {:else}
@@ -235,30 +250,48 @@
             <Monitor class="size-6" />
             {machine.name}
           </h1>
-          <Button variant="ghost" size="icon" onclick={() => isEditing = true}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onclick={() => (isEditing = true)}
+          >
             <Pencil class="size-4" />
           </Button>
         {/if}
         <Badge variant={machine.isOnline ? "success" : "secondary"}>
           {#if machine.isOnline}
-            <span class="mr-1 size-2 rounded-full bg-green-500 animate-pulse"></span>
+            <span class="mr-1 size-2 rounded-full bg-green-500 animate-pulse"
+            ></span>
           {/if}
           {machine.isOnline ? "Online" : "Offline"}
         </Badge>
       </div>
-      
+
       {#if showDeleteConfirm}
         <div class="flex items-center gap-2">
           <span class="text-sm text-destructive">Delete this machine?</span>
-          <Button variant="destructive" size="sm" onclick={deleteMachine} disabled={isDeleting}>
+          <Button
+            variant="destructive"
+            size="sm"
+            onclick={deleteMachine}
+            disabled={isDeleting}
+          >
             {isDeleting ? "Deleting..." : "Yes, Delete"}
           </Button>
-          <Button variant="outline" size="sm" onclick={() => showDeleteConfirm = false}>
+          <Button
+            variant="outline"
+            size="sm"
+            onclick={() => (showDeleteConfirm = false)}
+          >
             Cancel
           </Button>
         </div>
       {:else}
-        <Button variant="ghost" size="icon" onclick={() => showDeleteConfirm = true}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onclick={() => (showDeleteConfirm = true)}
+        >
           <Trash2 class="size-4 text-destructive" />
         </Button>
       {/if}
@@ -305,8 +338,11 @@
         <div class="flex flex-wrap gap-2">
           {#each Object.entries(visibleWidgets) as [key, visible]}
             <button
-              class="px-3 py-1 rounded-full text-sm border transition-colors {visible ? 'bg-primary text-primary-foreground border-primary' : 'bg-muted border-border'}"
-              onclick={() => visibleWidgets[key as keyof typeof visibleWidgets] = !visible}
+              class="px-3 py-1 rounded-full text-sm border transition-colors {visible
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'bg-muted border-border'}"
+              onclick={() =>
+                (visibleWidgets[key as keyof typeof visibleWidgets] = !visible)}
             >
               {key.toUpperCase()}
             </button>
@@ -328,14 +364,17 @@
           </Card.Header>
           <Card.Content>
             <div class="text-3xl font-bold">
-              {stats.cpuCurrentSpeed?.avg?.toFixed(2) ?? "?"} <span class="text-lg font-normal text-muted-foreground">GHz</span>
+              {stats.cpuCurrentSpeed?.avg?.toFixed(2) ?? "?"}
+              <span class="text-lg font-normal text-muted-foreground">GHz</span>
             </div>
             {#if stats.cpuCurrentSpeed?.cores?.length}
               <div class="mt-3 grid grid-cols-4 gap-2">
                 {#each stats.cpuCurrentSpeed.cores as coreSpeed, i}
                   <div class="text-center">
                     <div class="text-xs text-muted-foreground">Core {i}</div>
-                    <div class="text-sm font-medium">{coreSpeed.toFixed(1)}</div>
+                    <div class="text-sm font-medium">
+                      {coreSpeed.toFixed(1)}
+                    </div>
                   </div>
                 {/each}
               </div>
@@ -355,26 +394,36 @@
           </Card.Header>
           <Card.Content>
             <div class="text-3xl font-bold">
-              {getMemoryPercent().toFixed(0)}<span class="text-lg font-normal text-muted-foreground">%</span>
+              {getMemoryPercent().toFixed(0)}<span
+                class="text-lg font-normal text-muted-foreground">%</span
+              >
             </div>
-            <Progress 
-              value={getMemoryPercent()} 
+            <Progress
+              value={getMemoryPercent()}
               class="mt-2"
-              variant={getMemoryPercent() > 90 ? "danger" : getMemoryPercent() > 70 ? "warning" : "default"}
+              variant={getMemoryPercent() > 90
+                ? "danger"
+                : getMemoryPercent() > 70
+                  ? "warning"
+                  : "default"}
             />
-            <div class="mt-2 flex justify-between text-sm text-muted-foreground">
+            <div
+              class="mt-2 flex justify-between text-sm text-muted-foreground"
+            >
               <span>{formatBytes(stats.mem?.used ?? 0)} used</span>
               <span>{formatBytes(stats.mem?.total ?? 0)} total</span>
             </div>
             {#if stats.mem?.swaptotal > 0}
               <div class="mt-2 pt-2 border-t">
                 <div class="text-xs text-muted-foreground">Swap</div>
-                <Progress 
-                  value={(stats.mem.swapused / stats.mem.swaptotal) * 100} 
+                <Progress
+                  value={(stats.mem.swapused / stats.mem.swaptotal) * 100}
                   class="mt-1 h-1"
                 />
                 <div class="text-xs text-muted-foreground mt-1">
-                  {formatBytes(stats.mem.swapused)} / {formatBytes(stats.mem.swaptotal)}
+                  {formatBytes(stats.mem.swapused)} / {formatBytes(
+                    stats.mem.swaptotal,
+                  )}
                 </div>
               </div>
             {/if}
@@ -393,19 +442,27 @@
           </Card.Header>
           <Card.Content>
             <div class="text-3xl font-bold">
-              {getDiskPercent().toFixed(0)}<span class="text-lg font-normal text-muted-foreground">%</span>
+              {getDiskPercent().toFixed(0)}<span
+                class="text-lg font-normal text-muted-foreground">%</span
+              >
             </div>
-            <Progress 
-              value={getDiskPercent()} 
+            <Progress
+              value={getDiskPercent()}
               class="mt-2"
-              variant={getDiskPercent() > 90 ? "danger" : getDiskPercent() > 70 ? "warning" : "default"}
+              variant={getDiskPercent() > 90
+                ? "danger"
+                : getDiskPercent() > 70
+                  ? "warning"
+                  : "default"}
             />
             {#if stats.fsSize?.length}
               <div class="mt-3 space-y-2 max-h-32 overflow-y-auto">
                 {#each stats.fsSize as fs}
                   <div class="text-sm">
                     <div class="flex justify-between text-muted-foreground">
-                      <span class="truncate max-w-[120px]" title={fs.mount}>{fs.mount}</span>
+                      <span class="truncate max-w-[120px]" title={fs.mount}
+                        >{fs.mount}</span
+                      >
                       <span>{fs.use.toFixed(0)}%</span>
                     </div>
                     <Progress value={fs.use} class="h-1 mt-1" />
@@ -432,19 +489,28 @@
           </Card.Header>
           <Card.Content>
             <div class="text-3xl font-bold">
-              {stats.battery.percent}<span class="text-lg font-normal text-muted-foreground">%</span>
+              {stats.battery.percent}<span
+                class="text-lg font-normal text-muted-foreground">%</span
+              >
             </div>
-            <Progress 
-              value={stats.battery.percent} 
+            <Progress
+              value={stats.battery.percent}
               class="mt-2"
-              variant={stats.battery.percent < 20 ? "danger" : stats.battery.percent < 40 ? "warning" : "success"}
+              variant={stats.battery.percent < 20
+                ? "danger"
+                : stats.battery.percent < 40
+                  ? "warning"
+                  : "success"}
             />
-            <div class="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+            <div
+              class="mt-2 flex items-center gap-2 text-sm text-muted-foreground"
+            >
               {#if stats.battery.isCharging}
                 <Zap class="size-3 text-yellow-500" />
                 Charging
               {:else if stats.battery.timeRemaining > 0}
-                {Math.floor(stats.battery.timeRemaining / 60)}h {stats.battery.timeRemaining % 60}m remaining
+                {Math.floor(stats.battery.timeRemaining / 60)}h {stats.battery
+                  .timeRemaining % 60}m remaining
               {:else}
                 {stats.battery.acConnected ? "Plugged in" : "On battery"}
               {/if}
@@ -463,11 +529,17 @@
             </Card.Title>
           </Card.Header>
           <Card.Content>
-            <div class="text-3xl font-bold" class:text-yellow-500={stats.cpuTemperature.main >= 60} class:text-red-500={stats.cpuTemperature.main >= 80}>
-              {stats.cpuTemperature.main}<span class="text-lg font-normal text-muted-foreground">°C</span>
+            <div
+              class="text-3xl font-bold"
+              class:text-yellow-500={stats.cpuTemperature.main >= 60}
+              class:text-red-500={stats.cpuTemperature.main >= 80}
+            >
+              {stats.cpuTemperature.main}<span
+                class="text-lg font-normal text-muted-foreground">°C</span
+              >
             </div>
-            <Progress 
-              value={stats.cpuTemperature.main} 
+            <Progress
+              value={stats.cpuTemperature.main}
               max={100}
               class="mt-2"
               variant={getTempVariant(stats.cpuTemperature.main)}
@@ -478,7 +550,11 @@
                   {#if coreTemp > 0}
                     <div class="text-center">
                       <div class="text-xs text-muted-foreground">Core {i}</div>
-                      <div class="text-sm font-medium" class:text-yellow-500={coreTemp >= 60} class:text-red-500={coreTemp >= 80}>
+                      <div
+                        class="text-sm font-medium"
+                        class:text-yellow-500={coreTemp >= 60}
+                        class:text-red-500={coreTemp >= 80}
+                      >
                         {coreTemp}°
                       </div>
                     </div>
@@ -503,20 +579,29 @@
             <div class="space-y-2 text-sm">
               <div>
                 <span class="text-muted-foreground">Model:</span>
-                <span class="ml-2 font-medium">{stats.cpu?.brand ?? "Unknown"}</span>
+                <span class="ml-2 font-medium"
+                  >{stats.cpu?.brand ?? "Unknown"}</span
+                >
               </div>
               <div>
                 <span class="text-muted-foreground">Cores:</span>
-                <span class="ml-2 font-medium">{stats.cpu?.cores ?? "?"} ({stats.cpu?.physicalCores ?? "?"} physical)</span>
+                <span class="ml-2 font-medium"
+                  >{stats.cpu?.cores ?? "?"} ({stats.cpu?.physicalCores ?? "?"} physical)</span
+                >
               </div>
               <div>
                 <span class="text-muted-foreground">Speed:</span>
-                <span class="ml-2 font-medium">{stats.cpu?.speed ?? "?"} GHz (max {stats.cpu?.speedMax ?? "?"})</span>
+                <span class="ml-2 font-medium"
+                  >{stats.cpu?.speed ?? "?"} GHz (max {stats.cpu?.speedMax ??
+                    "?"})</span
+                >
               </div>
               {#if stats.cpu?.cache?.l3}
                 <div>
                   <span class="text-muted-foreground">L3 Cache:</span>
-                  <span class="ml-2 font-medium">{formatBytes(stats.cpu.cache.l3)}</span>
+                  <span class="ml-2 font-medium"
+                    >{formatBytes(stats.cpu.cache.l3)}</span
+                  >
                 </div>
               {/if}
             </div>

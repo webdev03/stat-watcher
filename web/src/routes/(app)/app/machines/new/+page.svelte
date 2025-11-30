@@ -1,12 +1,12 @@
 <script lang="ts">
+  import ArrowLeft from "@lucide/svelte/icons/arrow-left";
+  import CheckCircle from "@lucide/svelte/icons/check-circle";
+  import Copy from "@lucide/svelte/icons/copy";
+  import Loader2 from "@lucide/svelte/icons/loader-2";
   import { goto } from "$app/navigation";
   import Button from "$lib/components/ui/button/button.svelte";
   import * as Card from "$lib/components/ui/card";
   import Input from "$lib/components/ui/input/input.svelte";
-  import CheckCircle from "@lucide/svelte/icons/check-circle";
-  import Copy from "@lucide/svelte/icons/copy";
-  import Loader2 from "@lucide/svelte/icons/loader-2";
-  import ArrowLeft from "@lucide/svelte/icons/arrow-left";
 
   let name = $state("");
   let isCreating = $state(false);
@@ -75,9 +75,17 @@
         </Card.Description>
       </Card.Header>
       <Card.Content>
-        <form onsubmit={(e) => { e.preventDefault(); createMachine(); }} class="space-y-4">
+        <form
+          onsubmit={(e) => {
+            e.preventDefault();
+            createMachine();
+          }}
+          class="space-y-4"
+        >
           <div class="space-y-2">
-            <label for="machine-name" class="text-sm font-medium">Machine Name</label>
+            <label for="machine-name" class="text-sm font-medium"
+              >Machine Name</label
+            >
             <Input
               id="machine-name"
               bind:value={name}
@@ -114,7 +122,9 @@
         <div class="space-y-2">
           <span class="text-sm font-medium">Your Agent Token</span>
           <div class="flex gap-2">
-            <code class="bg-muted flex-1 rounded-md px-3 py-2 text-sm font-mono break-all">
+            <code
+              class="bg-muted flex-1 rounded-md px-3 py-2 text-sm font-mono break-all"
+            >
               {createdMachine.token}
             </code>
             <Button variant="outline" size="icon" onclick={copyToken}>
@@ -141,7 +151,9 @@
             </div>
             <div>
               <p class="text-sm font-medium">2. Configure with your token</p>
-              <code class="bg-background block rounded px-2 py-1 text-xs mt-1 break-all">
+              <code
+                class="bg-background block rounded px-2 py-1 text-xs mt-1 break-all"
+              >
                 stat-watcher-agent configure --token {createdMachine.token}
               </code>
             </div>
@@ -155,7 +167,10 @@
         </div>
 
         <div class="flex gap-2">
-          <Button onclick={() => goto(`/app/machines/${createdMachine?.id}`)} class="flex-1">
+          <Button
+            onclick={() => goto(`/app/machines/${createdMachine?.id}`)}
+            class="flex-1"
+          >
             View Machine Dashboard
           </Button>
           <Button variant="outline" onclick={() => goto("/app/machines")}>

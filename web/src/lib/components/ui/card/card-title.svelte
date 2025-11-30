@@ -4,7 +4,12 @@
 
   type Props = WithElementRef<HTMLAttributes<HTMLHeadingElement>>;
 
-  let { class: className, ref = $bindable(null), children, ...restProps }: Props = $props();
+  let {
+    class: className,
+    ref = $bindable(null),
+    children,
+    ...restProps
+  }: Props = $props();
 </script>
 
 <h3

@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import Monitor from "@lucide/svelte/icons/monitor";
+  import Plus from "@lucide/svelte/icons/plus";
+  import RefreshCw from "@lucide/svelte/icons/refresh-cw";
+  import { Badge } from "$lib/components/ui/badge";
   import Button from "$lib/components/ui/button/button.svelte";
   import * as Card from "$lib/components/ui/card";
-  import { Badge } from "$lib/components/ui/badge";
   import { Skeleton } from "$lib/components/ui/skeleton";
-  import Plus from "@lucide/svelte/icons/plus";
-  import Monitor from "@lucide/svelte/icons/monitor";
-  import RefreshCw from "@lucide/svelte/icons/refresh-cw";
+  import { onMount } from "svelte";
 
   interface Machine {
     id: string;
@@ -23,7 +23,7 @@
   async function loadMachines() {
     isLoading = true;
     error = "";
-    
+
     try {
       const response = await fetch("/api/machines");
       if (!response.ok) {
@@ -43,7 +43,7 @@
     const date = new Date(lastSeen);
     const now = new Date();
     const diff = now.getTime() - date.getTime();
-    
+
     if (diff < 60000) return "Just now";
     if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
     if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
@@ -65,7 +65,12 @@
       <p class="text-muted-foreground">Manage your monitored machines</p>
     </div>
     <div class="flex gap-2">
-      <Button variant="outline" size="icon" onclick={loadMachines} disabled={isLoading}>
+      <Button
+        variant="outline"
+        size="icon"
+        onclick={loadMachines}
+        disabled={isLoading}
+      >
         <RefreshCw class="size-4 {isLoading ? 'animate-spin' : ''}" />
       </Button>
       <Button href="/app/machines/new">
@@ -79,7 +84,11 @@
     <Card.Card>
       <Card.Content class="py-6">
         <p class="text-destructive text-center">{error}</p>
-        <Button variant="outline" onclick={loadMachines} class="mx-auto mt-4 block">
+        <Button
+          variant="outline"
+          onclick={loadMachines}
+          class="mx-auto mt-4 block"
+        >
           Try Again
         </Button>
       </Card.Content>
@@ -125,7 +134,9 @@
                 </Card.Title>
                 <Badge variant={machine.isOnline ? "success" : "secondary"}>
                   {#if machine.isOnline}
-                    <span class="mr-1 size-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span
+                      class="mr-1 size-2 rounded-full bg-green-500 animate-pulse"
+                    ></span>
                   {/if}
                   {machine.isOnline ? "Online" : "Offline"}
                 </Badge>

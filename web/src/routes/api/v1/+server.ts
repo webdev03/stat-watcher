@@ -1,16 +1,19 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
 import { machine, statsSnapshot } from "$lib/server/db/schema";
+import { latestStats } from "$lib/server/stats-store";
+import type { StatsPayload } from "$lib/types/stats";
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
-import type { StatsPayload } from "$lib/types/stats";
-import { latestStats } from "$lib/server/stats-store";
 
 export const POST: RequestHandler = async ({ request }) => {
   // Get bearer token from Authorization header
   const authHeader = request.headers.get("Authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return json({ error: "Missing or invalid authorization header" }, { status: 401 });
+    return json(
+      { error: "Missing or invalid authorization header" },
+      { status: 401 },
+    );
   }
 
   const token = authHeader.slice(7); // Remove "Bearer " prefix
@@ -39,7 +42,10 @@ export const POST: RequestHandler = async ({ request }) => {
   const now = new Date();
 
   // Update last seen timestamp
-  await db.update(machine).set({ lastSeen: now }).where(eq(machine.id, machineRecord.id));
+  await db
+    .update(machine)
+    .set({ lastSeen: now })
+    .where(eq(machine.id, machineRecord.id));
 
   // Store stats in memory for real-time streaming
   const existingEntry = latestStats.get(machineRecord.id);

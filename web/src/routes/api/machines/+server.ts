@@ -1,9 +1,9 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
+import { auth } from "$lib/auth";
 import { db } from "$lib/server/db";
 import { machine } from "$lib/server/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
-import { auth } from "$lib/auth";
 
 // Get all machines for authenticated user
 export const GET: RequestHandler = async ({ request }) => {

@@ -1,9 +1,9 @@
 import { json, type RequestHandler } from "@sveltejs/kit";
+import { auth } from "$lib/auth";
 import { db } from "$lib/server/db";
 import { machine, statsSnapshot } from "$lib/server/db/schema";
-import { eq, desc, and } from "drizzle-orm";
-import { auth } from "$lib/auth";
 import { latestStats } from "$lib/server/stats-store";
+import { and, desc, eq } from "drizzle-orm";
 
 // Get machine details and latest stats
 export const GET: RequestHandler = async ({ request, params }) => {

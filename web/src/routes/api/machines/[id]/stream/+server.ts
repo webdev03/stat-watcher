@@ -1,10 +1,10 @@
 import type { RequestHandler } from "@sveltejs/kit";
+import { auth } from "$lib/auth";
 import { db } from "$lib/server/db";
 import { machine } from "$lib/server/db/schema";
-import { eq, and } from "drizzle-orm";
-import { auth } from "$lib/auth";
 import { latestStats } from "$lib/server/stats-store";
 import type { Stats } from "$lib/types/stats";
+import { and, eq } from "drizzle-orm";
 
 export const GET: RequestHandler = async ({ request, params }) => {
   const session = await auth.api.getSession({ headers: request.headers });
@@ -33,20 +33,28 @@ export const GET: RequestHandler = async ({ request, params }) => {
       const encoder = new TextEncoder();
 
       // Send initial connection message
-      controller.enqueue(encoder.encode(`event: connected\ndata: {"machineId": "${machineId}"}\n\n`));
+      controller.enqueue(
+        encoder.encode(
+          `event: connected\ndata: {"machineId": "${machineId}"}\n\n`,
+        ),
+      );
 
       // Send current stats if available
       const current = latestStats.get(machineId);
       if (current) {
         controller.enqueue(
-          encoder.encode(`event: stats\ndata: ${JSON.stringify(current.stats)}\n\n`),
+          encoder.encode(
+            `event: stats\ndata: ${JSON.stringify(current.stats)}\n\n`,
+          ),
         );
       }
 
       // Create listener for new stats
       const listener = (stats: Stats) => {
         try {
-          controller.enqueue(encoder.encode(`event: stats\ndata: ${JSON.stringify(stats)}\n\n`));
+          controller.enqueue(
+            encoder.encode(`event: stats\ndata: ${JSON.stringify(stats)}\n\n`),
+          );
         } catch {
           // Stream closed, will be cleaned up
         }

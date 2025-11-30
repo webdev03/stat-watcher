@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import Activity from "@lucide/svelte/icons/activity";
+  import Cpu from "@lucide/svelte/icons/cpu";
+  import HardDrive from "@lucide/svelte/icons/hard-drive";
+  import MemoryStick from "@lucide/svelte/icons/memory-stick";
+  import Monitor from "@lucide/svelte/icons/monitor";
+  import Plus from "@lucide/svelte/icons/plus";
+  import { Badge } from "$lib/components/ui/badge";
   import Button from "$lib/components/ui/button/button.svelte";
   import * as Card from "$lib/components/ui/card";
-  import { Badge } from "$lib/components/ui/badge";
-  import { Skeleton } from "$lib/components/ui/skeleton";
   import { Progress } from "$lib/components/ui/progress";
-  import Plus from "@lucide/svelte/icons/plus";
-  import Monitor from "@lucide/svelte/icons/monitor";
-  import Cpu from "@lucide/svelte/icons/cpu";
-  import MemoryStick from "@lucide/svelte/icons/memory-stick";
-  import HardDrive from "@lucide/svelte/icons/hard-drive";
-  import Activity from "@lucide/svelte/icons/activity";
+  import { Skeleton } from "$lib/components/ui/skeleton";
   import type { Stats } from "$lib/types/stats";
+  import { onMount } from "svelte";
 
   interface Machine {
     id: string;
@@ -31,10 +31,10 @@
     try {
       const response = await fetch("/api/machines");
       if (!response.ok) return;
-      
+
       const data = await response.json();
       const machineList = data.machines as Machine[];
-      
+
       // Fetch stats for online machines
       const machinesWithStats = await Promise.all(
         machineList.map(async (m) => {
@@ -51,9 +51,9 @@
             // Ignore errors
           }
           return { ...m, stats: null };
-        })
+        }),
       );
-      
+
       machines = machinesWithStats;
     } finally {
       isLoading = false;
@@ -137,7 +137,9 @@
         <Card.Description>Offline</Card.Description>
       </Card.Header>
       <Card.Content>
-        <div class="text-2xl font-bold flex items-center gap-2 text-muted-foreground">
+        <div
+          class="text-2xl font-bold flex items-center gap-2 text-muted-foreground"
+        >
           <Activity class="size-5" />
           {isLoading ? "-" : machines.length - onlineCount}
         </div>
@@ -154,8 +156,12 @@
           {#if isLoading}
             -
           {:else}
-            {@const temps = machines.map((m) => getCpuTemp(m.stats)).filter((t) => t !== null)}
-            {temps.length > 0 ? `${Math.round(temps.reduce((a, b) => a + b, 0) / temps.length)}°C` : "N/A"}
+            {@const temps = machines
+              .map((m) => getCpuTemp(m.stats))
+              .filter((t) => t !== null)}
+            {temps.length > 0
+              ? `${Math.round(temps.reduce((a, b) => a + b, 0) / temps.length)}°C`
+              : "N/A"}
           {/if}
         </div>
       </Card.Content>
@@ -221,7 +227,8 @@
                           <Cpu class="size-3" /> CPU
                         </span>
                         <span class="text-muted-foreground">
-                          {machine.stats.cpuCurrentSpeed?.avg?.toFixed(1) ?? "?"} GHz
+                          {machine.stats.cpuCurrentSpeed?.avg?.toFixed(1) ??
+                            "?"} GHz
                           {#if getCpuTemp(machine.stats)}
                             • {getCpuTemp(machine.stats)}°C
                           {/if}
@@ -236,12 +243,18 @@
                           <MemoryStick class="size-3" /> Memory
                         </span>
                         <span class="text-muted-foreground">
-                          {formatBytes(machine.stats.mem?.used ?? 0)} / {formatBytes(machine.stats.mem?.total ?? 0)}
+                          {formatBytes(machine.stats.mem?.used ?? 0)} / {formatBytes(
+                            machine.stats.mem?.total ?? 0,
+                          )}
                         </span>
                       </div>
-                      <Progress 
-                        value={getMemoryPercent(machine.stats)} 
-                        variant={getMemoryPercent(machine.stats) > 90 ? "danger" : getMemoryPercent(machine.stats) > 70 ? "warning" : "default"}
+                      <Progress
+                        value={getMemoryPercent(machine.stats)}
+                        variant={getMemoryPercent(machine.stats) > 90
+                          ? "danger"
+                          : getMemoryPercent(machine.stats) > 70
+                            ? "warning"
+                            : "default"}
                       />
                     </div>
 
@@ -255,9 +268,13 @@
                           {getDiskPercent(machine.stats).toFixed(0)}% used
                         </span>
                       </div>
-                      <Progress 
-                        value={getDiskPercent(machine.stats)} 
-                        variant={getDiskPercent(machine.stats) > 90 ? "danger" : getDiskPercent(machine.stats) > 70 ? "warning" : "default"}
+                      <Progress
+                        value={getDiskPercent(machine.stats)}
+                        variant={getDiskPercent(machine.stats) > 90
+                          ? "danger"
+                          : getDiskPercent(machine.stats) > 70
+                            ? "warning"
+                            : "default"}
                       />
                     </div>
                   </div>
