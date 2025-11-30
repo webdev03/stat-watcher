@@ -23,5 +23,5 @@
     "agent/",
     "web/"
   ],
-  "packageManager": "bun@1.3.2"
+  "packageManager": "bun@1.3.3"
 }
