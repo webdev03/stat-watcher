@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -76,6 +83,7 @@ export const verification = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  machines: many(machine),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -89,5 +97,60 @@ export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
     references: [user.id],
+  }),
+}));
+
+// Machine (agent) that reports stats
+export const machine = pgTable(
+  "machine",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    token: text("token").notNull().unique(),
+    lastSeen: timestamp("last_seen"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("machine_userId_idx").on(table.userId),
+    index("machine_token_idx").on(table.token),
+  ],
+);
+
+// Stats snapshot from a machine
+export const statsSnapshot = pgTable(
+  "stats_snapshot",
+  {
+    id: text("id").primaryKey(),
+    machineId: text("machine_id")
+      .notNull()
+      .references(() => machine.id, { onDelete: "cascade" }),
+    data: jsonb("data").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("stats_snapshot_machineId_idx").on(table.machineId),
+    index("stats_snapshot_createdAt_idx").on(table.createdAt),
+  ],
+);
+
+export const machineRelations = relations(machine, ({ one, many }) => ({
+  user: one(user, {
+    fields: [machine.userId],
+    references: [user.id],
+  }),
+  statsSnapshots: many(statsSnapshot),
+}));
+
+export const statsSnapshotRelations = relations(statsSnapshot, ({ one }) => ({
+  machine: one(machine, {
+    fields: [statsSnapshot.machineId],
+    references: [machine.id],
   }),
 }));
