@@ -5,7 +5,7 @@ import { getStats } from "./stats";
 console.log("** stat-watcher **");
 console.log(`Running on Bun ${version_with_sha}`);
 
-const config = new Conf({ projectName: "stat-watcher-agent" });
+const config = new Conf({ projectName: "stat-watcher-agent", projectSuffix: "bun" });
 
 console.log(`Configuration at ${config.path}`);
 
