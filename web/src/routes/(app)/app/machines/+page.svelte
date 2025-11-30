@@ -125,7 +125,7 @@
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {#each machines as machine (machine.id)}
         <a href="/app/machines/{machine.id}">
-          <Card.Card variant="interactive">
+          <Card.Card>
             <Card.Header>
               <div class="flex items-center justify-between">
                 <Card.Title class="flex items-center gap-2">

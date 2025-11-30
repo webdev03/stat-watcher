@@ -108,7 +108,7 @@
 
   <!-- Summary Cards -->
   <div class="grid gap-4 md:grid-cols-4">
-    <Card.Card>
+    <Card.Root>
       <Card.Header class="pb-2">
         <Card.Description>Total Machines</Card.Description>
       </Card.Header>
@@ -118,9 +118,9 @@
           {isLoading ? "-" : machines.length}
         </div>
       </Card.Content>
-    </Card.Card>
+    </Card.Root>
 
-    <Card.Card>
+    <Card.Root>
       <Card.Header class="pb-2">
         <Card.Description>Online</Card.Description>
       </Card.Header>
@@ -130,9 +130,9 @@
           {isLoading ? "-" : onlineCount}
         </div>
       </Card.Content>
-    </Card.Card>
+    </Card.Root>
 
-    <Card.Card>
+    <Card.Root>
       <Card.Header class="pb-2">
         <Card.Description>Offline</Card.Description>
       </Card.Header>
@@ -144,9 +144,9 @@
           {isLoading ? "-" : machines.length - onlineCount}
         </div>
       </Card.Content>
-    </Card.Card>
+    </Card.Root>
 
-    <Card.Card>
+    <Card.Root>
       <Card.Header class="pb-2">
         <Card.Description>Avg CPU Temp</Card.Description>
       </Card.Header>
@@ -165,7 +165,7 @@
           {/if}
         </div>
       </Card.Content>
-    </Card.Card>
+    </Card.Root>
   </div>
 
   <!-- Machine Stats Grid -->
@@ -175,7 +175,7 @@
     {#if isLoading}
       <div class="grid gap-4 md:grid-cols-2">
         {#each Array(2) as _}
-          <Card.Card>
+          <Card.Root>
             <Card.Header>
               <Skeleton class="h-5 w-40" />
             </Card.Header>
@@ -184,11 +184,11 @@
               <Skeleton class="h-4 w-full" />
               <Skeleton class="h-4 w-full" />
             </Card.Content>
-          </Card.Card>
+          </Card.Root>
         {/each}
       </div>
     {:else if machines.length === 0}
-      <Card.Card>
+      <Card.Root>
         <Card.Content class="py-12 text-center">
           <Monitor class="text-muted-foreground mx-auto size-12 mb-4" />
           <h3 class="text-lg font-semibold mb-2">No machines yet</h3>
@@ -200,12 +200,12 @@
             Add Machine
           </Button>
         </Card.Content>
-      </Card.Card>
+      </Card.Root>
     {:else}
       <div class="grid gap-4 md:grid-cols-2">
         {#each machines as machine (machine.id)}
           <a href="/app/machines/{machine.id}">
-            <Card.Card variant="interactive">
+            <Card.Root>
               <Card.Header>
                 <div class="flex items-center justify-between">
                   <Card.Title class="flex items-center gap-2">
@@ -284,7 +284,7 @@
                   </p>
                 {/if}
               </Card.Content>
-            </Card.Card>
+            </Card.Root>
           </a>
         {/each}
       </div>

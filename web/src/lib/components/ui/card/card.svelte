@@ -1,40 +1,22 @@
-<script lang="ts" module>
+<script lang="ts">
   import { cn, type WithElementRef } from "$lib/utils.js";
   import type { HTMLAttributes } from "svelte/elements";
-  import { tv, type VariantProps } from "tailwind-variants";
 
-  export const cardVariants = tv({
-    base: "bg-card text-card-foreground rounded-xl border shadow-sm",
-    variants: {
-      variant: {
-        default: "",
-        interactive: "hover:bg-accent/50 transition-colors cursor-pointer",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  });
-
-  export type CardProps = WithElementRef<HTMLAttributes<HTMLDivElement>> & {
-    variant?: VariantProps<typeof cardVariants>["variant"];
-  };
-</script>
-
-<script lang="ts">
   let {
-    class: className,
-    variant = "default",
     ref = $bindable(null),
+    class: className,
     children,
     ...restProps
-  }: CardProps = $props();
+  }: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
 </script>
 
 <div
   bind:this={ref}
   data-slot="card"
-  class={cn(cardVariants({ variant }), className)}
+  class={cn(
+    "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+    className,
+  )}
   {...restProps}
 >
   {@render children?.()}

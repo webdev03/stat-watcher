@@ -2,20 +2,18 @@
   import { cn, type WithElementRef } from "$lib/utils.js";
   import type { HTMLAttributes } from "svelte/elements";
 
-  type Props = WithElementRef<HTMLAttributes<HTMLDivElement>>;
-
   let {
-    class: className,
     ref = $bindable(null),
+    class: className,
     children,
     ...restProps
-  }: Props = $props();
+  }: WithElementRef<HTMLAttributes<HTMLDivElement>> = $props();
 </script>
 
 <div
   bind:this={ref}
   data-slot="card-footer"
-  class={cn("flex items-center p-6 pt-0", className)}
+  class={cn("[.border-t]:pt-6 flex items-center px-6", className)}
   {...restProps}
 >
   {@render children?.()}

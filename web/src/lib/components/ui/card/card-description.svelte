@@ -2,14 +2,12 @@
   import { cn, type WithElementRef } from "$lib/utils.js";
   import type { HTMLAttributes } from "svelte/elements";
 
-  type Props = WithElementRef<HTMLAttributes<HTMLParagraphElement>>;
-
   let {
-    class: className,
     ref = $bindable(null),
+    class: className,
     children,
     ...restProps
-  }: Props = $props();
+  }: WithElementRef<HTMLAttributes<HTMLParagraphElement>> = $props();
 </script>
 
 <p
